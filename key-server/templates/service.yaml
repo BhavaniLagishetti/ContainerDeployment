@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "key-server.fullname" . }}
+  labels:
+    app: {{ include "key-server.name" . }}
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "{{ .Values.service.annotations['service.beta.kubernetes.io/aws-load-balancer-type'] }}"
+    service.beta.kubernetes.io/aws-load-balancer-scheme: "{{ .Values.service.annotations['service.beta.kubernetes.io/aws-load-balancer-scheme'] }}"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "{{ .Values.service.annotations['service.beta.kubernetes.io/aws-load-balancer-ssl-ports'] }}"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "{{ .Values.service.annotations['service.beta.kubernetes.io/aws-load-balancer-ssl-cert'] }}"
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}            # External port (e.g., 80 for HTTP or 443 for HTTPS)
+      targetPort: {{ .Values.service.targetPort }} # Port exposed by the container (e.g., 1123

@@ -1,0 +1,9 @@
+Here’s the proposed method for notifying and alerting on undesirable behavior for your application:
+
+1. Prometheus collects metrics on HTTP status codes, latency, and other application-specific behaviors.
+2. Prometheus Alerting Rules are defined to trigger alerts when error rates are high, or latency exceeds thresholds.
+3. Alertmanager sends notifications to the specified channels (email, Slack, etc.) based on the alerting rules.
+4. Grafana can be used to visualize the application metrics and provide insights into the performance and health of the system.
+  
+
+This setup ensures that you are promptly notified when undesirable behaviors, such as high error rates or latency, occur in your application.

@@ -1,0 +1,48 @@
+replicaCount: 2
+
+image:
+  repository: key-server  # Replace this with your Docker image repository
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: LoadBalancer       # Using LoadBalancer for external access
+  port: 80                 # Port exposed for HTTP traffic
+  targetPort: 1123         # The container's port where the application is listening
+  annotations:             # AWS-specific annotations to provision an ALB
+    service.beta.kubernetes.io/aws-load-balancer-type: "external"
+    service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"  # Can be internal or internet-facing
+    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "" # SSL certificate ARN from AWS (if required)
+
+resources:
+  limits:
+    cpu: "500m"
+    memory: "128Mi"
+  requests:
+    cpu: "200m"
+    memory: "64Mi"
+
+maxSize: 1024     # Default maximum key size, can be overridden
+srvPort: 1123     # Default server port, can be overridden
+
+livenessProbe:
+  httpGet:
+    path: /metrics
+    port: srvPort
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 2
+  successThreshold: 1
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /metrics
+    port: srvPort
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 2
+  successThreshold: 1
+  failureThreshold: 3
